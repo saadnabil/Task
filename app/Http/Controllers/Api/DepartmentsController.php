@@ -46,6 +46,8 @@ class DepartmentsController extends Controller
         return $this->sendResponse(new DepartmentResource($department));
     }
 
+    //
+
     public function delete(Request $request, $id){
         $department = Department::with('department_employees')->find($id);
         if(!$department){
