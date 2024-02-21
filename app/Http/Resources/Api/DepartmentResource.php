@@ -14,10 +14,20 @@ class DepartmentResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
+        $data =  [
             'id' => $this->id,
             'name' => $this->name,
             'manager' => new EmployeeResource($this->manager),
         ];
+
+        if($this->employees_count){
+            $data['employees_count'] = $this->employees_count;
+        }
+        if($this->employees_sum_salary){
+            $data['employees_sum_salary'] = $this->employees_sum_salary;
+        }
+
+        return $data;
+
     }
 }

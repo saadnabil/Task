@@ -21,13 +21,13 @@ class DeprartmentService{
         return true;
     }
 
-    public function searchEmployees($query):Paginator{
-        $rows = Employee::where('first_name', 'like' , "%$query%")
-                ->where('last_name', 'like' , "%$query%")
-                ->where('salary', 'like' , "%$query%")
-                ->where('salary', 'like' , "%$query%")
-                ->simplepaginate();
-        return $rows;
+    public function search($search):Paginator{
+        return Department::where(function ($q) use ($search) {
+                                      $q->where('name', 'like', "%$search%");
+                                     })
+                                     ->withCount('employees as employees_count')
+                                    ->withSum('employees as employees_sum_salary', 'salary')
+                                    ->simplepaginate();
     }
 
 

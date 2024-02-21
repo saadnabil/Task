@@ -7,7 +7,7 @@ use App\Rules\CheckManagerId;
 use App\Rules\ComplexPassword;
 use Illuminate\Foundation\Http\FormRequest;
 
-class TaskValidation extends FormRequest
+class TaskValidation extends AbstractFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

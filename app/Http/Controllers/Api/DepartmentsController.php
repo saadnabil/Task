@@ -3,15 +3,12 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DepartmentValidation;
-use App\Http\Requests\SearchEmployeeValidation;
-use App\Http\Requests\UpdateEmployeeValidation;
+use App\Http\Requests\SearchValidation;
 use App\Http\Resources\Api\DepartmentResource;
 use App\Http\Resources\Api\EmployeeResource;
 use App\Models\Department;
 use App\Traits\ApiResponseTrait;
-use App\Models\Employee;
 use App\Services\DeprartmentService;
-use App\Services\Employee\EmployeeService;
 use Illuminate\Http\Request;
 
 class DepartmentsController extends Controller
@@ -46,24 +43,22 @@ class DepartmentsController extends Controller
         return $this->sendResponse(new DepartmentResource($department));
     }
 
-    //
-
     public function delete(Request $request, $id){
-        $department = Department::with('department_employees')->find($id);
+        $department = Department::with('employees')->find($id);
         if(!$department){
             return $this->sendResponse(['error' => 'Department is not found !'], 'fail' , 404);
         }
-        if(count($department->department_employees) > 0){
+        if($department->employees->count() > 0){
             return $this->sendResponse(['error' => 'Cant delete department has employees !'], 'fail' , 404);
         }
         $department->delete();
         return $this->sendResponse([]);
     }
 
-    public function search(SearchEmployeeValidation $request){
+    public function search(SearchValidation $request){
         $data = $request->validated();
-        $filteredRows = $this->employeeService->searchEmployees($data, $data['query']);
-        return $this->sendResponse(resource_collection(EmployeeResource::collection($filteredRows)));
+        $response = $this->departmentService->search($data['query']);
+        return $this->sendResponse(resource_collection(DepartmentResource::collection($response)));
     }
 
 

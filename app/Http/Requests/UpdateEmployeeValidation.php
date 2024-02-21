@@ -6,7 +6,7 @@ use App\Rules\CheckManagerId;
 use App\Rules\ComplexPassword;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateEmployeeValidation extends FormRequest
+class UpdateEmployeeValidation extends AbstractFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

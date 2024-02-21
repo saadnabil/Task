@@ -19,7 +19,7 @@ class EmployeeService{
             $employee['token'] = $employee->createToken('myApp')->plainTextToken;
             return $employee;
         }
-        return null;
+        return ['error' => 'Password or email is not correct'];
     }
 
     public function createEmployee($data) :Object{
@@ -28,23 +28,34 @@ class EmployeeService{
         return Employee::create($data);
     }
 
-    public function editEmployee($data, $employee) :bool{
-        if(isset($data['password'])){
+    public function editEmployee($request, $id)
+    {
+        $data = $request->validated();
+        $employee = Employee::find($id);
+
+        if (!$employee) {
+            return ['error' => 'Employee is not found!'];
+        }
+
+        if (isset($data['password'])) {
             $data['password'] = Hash::make($data['password']);
         }
-        if(isset($data['image'])){
-            $data['image'] = FileHelper::update_file('storage',$data['image'], $employee->image);
+
+        if (isset($data['image'])) {
+            $data['image'] = FileHelper::update_file('storage', $data['image'], $employee->image);
         }
+
         $employee->update($data);
-        return true;
+
+        return $employee;
     }
 
-    public function searchEmployees($query):Paginator{
-        $rows = Employee::where('first_name', 'like' , "%$query%")
-                ->where('last_name', 'like' , "%$query%")
-                ->where('salary', 'like' , "%$query%")
-                ->where('salary', 'like' , "%$query%")
-                ->simplepaginate();
+    public function searchEmployees($search):Paginator{
+        $rows = Employee::where('first_name', 'like', "%$search%")
+                            ->orWhere('last_name', 'like', "%$search%")
+                            ->orWhere('salary', 'like', "%$search%")
+                            ->orWhere('email', 'like', "%$search%")
+                            ->simplepaginate();
         return $rows;
     }
 

@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\Api\DepartmentsController;
 use App\Http\Controllers\Api\EmployeesController;
-use App\Http\Controllers\Api\TasksController;
+use App\Http\Controllers\Api\ManagerController;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -37,7 +37,7 @@ Route::group(['prefix' => 'v1'], function(){
             Route::post('create', [EmployeesController::class , 'create']);
             Route::post('edit/{id}', [EmployeesController::class , 'edit']);
             Route::post('delete/{id}', [EmployeesController::class , 'delete']);
-            // Route::post('search', [EmployeesController::class , 'search']);
+            Route::post('search', [EmployeesController::class , 'search']);
         });
 
         Route::group(['prefix' => 'department'],function(){
@@ -45,13 +45,15 @@ Route::group(['prefix' => 'v1'], function(){
             Route::post('create', [DepartmentsController::class , 'create']);
             Route::post('edit/{id}', [DepartmentsController::class , 'edit']);
             Route::post('delete/{id}', [DepartmentsController::class , 'delete']);
-            // Route::post('search', [DepartmentsController::class , 'search']);
+            Route::post('search', [DepartmentsController::class , 'search']);
         });
 
-        Route::group(['prefix' => 'task'],function(){
-            Route::post('create', [TasksController::class , 'create']);
-            Route::post('search', [TasksController::class , 'searchForEmployees']);
+        Route::group(['prefix' => 'manager'],function(){
+            Route::post('create', [ManagerController::class , 'create']);
+            Route::post('search', [ManagerController::class , 'searchForEmployees']);
+            Route::get('all/{employeeid}', [ManagerController::class , 'listEmployeeTasks']);
         });
+
     });
 
 });

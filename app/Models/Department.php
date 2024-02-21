@@ -18,8 +18,11 @@ class Department extends Model
         return $this->belongsTo(Employee::class, 'manager_id')->withTrashed();
     }
 
-    public function department_employees(){
-        return $this->hasMany(DepartmentEmployee::class);
+
+
+    public function employees()
+    {
+        return $this->belongsToMany(Employee::class, 'department_employees');
     }
 
 }

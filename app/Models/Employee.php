@@ -31,9 +31,6 @@ class Employee extends Authenticatable
         return $this->hasMany(Employee::class, 'manager_id');
     }
 
-    public function departments(){
-        return $this->belongsTo(Department::class, 'department_employees');
-    }
 
     public function getFullNameAttribute(){
         return $this->first_name . ' ' . $this->last_name;
@@ -41,6 +38,15 @@ class Employee extends Authenticatable
 
     public function getImageUrlAttribute(){
         return $this->image != null ?  url('storage/'. $this->image): null ;
+    }
+
+    public function tasks(){
+        return $this->hasMany(Task::class);
+    }
+
+    public function departments()
+    {
+        return $this->belongsToMany(Department::class , 'department_employees');
     }
 
 }
