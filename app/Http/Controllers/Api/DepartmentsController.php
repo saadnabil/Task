@@ -10,7 +10,6 @@ use App\Models\Department;
 use App\Traits\ApiResponseTrait;
 use App\Services\DeprartmentService;
 use Illuminate\Http\Request;
-
 class DepartmentsController extends Controller
 {
     use ApiResponseTrait;
